@@ -1,0 +1,12 @@
+{
+  "name": "garbageManagement",
+  "displayName": "garbageManagement",
+  "expo": {
+    "name": "garbageManagement",
+    "slug": "garbageManagement",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
