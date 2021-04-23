@@ -3,7 +3,7 @@ import { View, StyleSheet, Alert, BackHandler } from 'react-native';
 import { Avatar, Title, Caption, Drawer, Text, } from 'react-native-paper';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faHome, faSignOutAlt, faUserEdit, faMapMarkedAlt, faRoute, faComment, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faSignOutAlt, faUserEdit, faMapMarkedAlt, faRoute, faComment, faExclamationTriangle, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
 
 export function DrawerContent(props) {
 
@@ -69,7 +69,7 @@ export function DrawerContent(props) {
                     <Drawer.Section style={styles.bottomDrawerSection}>
                         <DrawerItem
                             icon={({ color, size }) => (
-                                <FontAwesomeIcon icon={faMapMarkedAlt} color='#28587D' size={size} />
+                                <FontAwesomeIcon icon={faMapMarkerAlt} color='#28587D' size={size} />
                             )}
                             label="Konteyner Ekle"
                             onPress={() => { props.navigation.navigate('AAddBinScreen') }}
@@ -80,7 +80,7 @@ export function DrawerContent(props) {
                             icon={({ color, size }) => (
                                 <FontAwesomeIcon icon={faRoute} color='#28587D' size={size} />
                             )}
-                            label="Rota Ayarla"
+                            label="Rotaları Görüntüle"
                             onPress={() => { props.navigation.navigate('ASetRouteScreen') }}
                         />
                     </Drawer.Section>
@@ -116,6 +116,7 @@ export function DrawerContent(props) {
                     onPress={() => backAction()}
                 />
             </Drawer.Section>
+
         </View>
     );
 }

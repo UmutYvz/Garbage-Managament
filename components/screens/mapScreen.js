@@ -2,7 +2,7 @@ import { StyleSheet, TouchableHighlight, Text, View, TouchableOpacity } from 're
 import React from 'react';
 import MapView from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faRedoAlt,faAngleLeft } from '@fortawesome/free-solid-svg-icons'
+import { faRedoAlt, faAngleLeft } from '@fortawesome/free-solid-svg-icons'
 
 
 export default class mapScreen extends React.Component {
@@ -20,7 +20,7 @@ export default class mapScreen extends React.Component {
 
   componentDidMount() {
     //fetch('https://my-json-server.typicode.com/UmutYvz/JSONHOLDER/report')
-    fetch('http://192.168.1.4/backend/get_markers.php')
+    fetch('http://192.168.1.2/backend/get_markers.php')
       .then(res => res.json())
       .then(data => {
         //console.log(data)
@@ -28,8 +28,6 @@ export default class mapScreen extends React.Component {
       })
       .catch(console.error)
   }
-
-
 
   goToMarkerDetail(id) {
 
@@ -101,7 +99,7 @@ export default class mapScreen extends React.Component {
           onPress={() => { this.props.navigation.goBack(null) }}
         >
           <View style={styles.ltouchable}>
-          <FontAwesomeIcon icon={faAngleLeft} color='white' size={40} />
+            <FontAwesomeIcon icon={faAngleLeft} color='white' size={40} />
           </View>
         </TouchableOpacity>
       </View>
@@ -149,14 +147,14 @@ const styles = StyleSheet.create({
     marginTop: 9,
     marginLeft: 10,
 
-  },leftB: {
+  }, leftB: {
     width: 50,
     height: 50,
     backgroundColor: 'blue',
     borderRadius: 100,
     position: 'absolute',
     top: 35,
-    left:15,
+    left: 15,
     borderRadius: 100
   },
   ltouchable: {

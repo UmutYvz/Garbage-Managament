@@ -39,7 +39,7 @@ export default class LoginScreen extends Component {
     }
     else {
 
-      axios.post('http://192.168.1.4/backend/login.php', {
+      axios.post('http://192.168.1.2/backend/login.php', {
         email: userEmail,
         password: userPassword
       })

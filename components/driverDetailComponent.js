@@ -10,7 +10,7 @@ const driverDetailComponent = (props) => {
 
   const deleteData = (id) => {
     console.log(info.markerData);
-    fetch('http://192.168.1.4/backend/delete_driver.php', {
+    fetch('http://192.168.1.2/backend/delete_driver.php', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

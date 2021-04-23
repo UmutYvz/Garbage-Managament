@@ -46,7 +46,7 @@ export default class AAddBinScreen extends React.Component {
 
         console.log(this.state.address_m);
         if (this.state.address_m && this.state.street && this.state.district && this.state.city && this.state.country && this.state.info && this.state.lat && this.state.lon) {
-            fetch('http://192.168.1.4/backend/add_marker.php', {
+            fetch('http://192.168.1.2/backend/add_marker.php', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

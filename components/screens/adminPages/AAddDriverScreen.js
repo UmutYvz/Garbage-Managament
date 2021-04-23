@@ -49,7 +49,7 @@ export default class AAddDriverScreen extends React.Component {
                 return false;
             } else {
 
-                fetch('http://192.168.1.4/backend/add_driver.php', {
+                fetch('http://192.168.1.2/backend/add_driver.php', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',

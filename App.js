@@ -2,103 +2,96 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator, HeaderBackButton } from 'react-navigation-stack';
 import LoginScreen from './components/screens/loginScreen'
 import RegisterScreen from './components/screens/registerScreen'
-import MapScreen from './components/screens/mapScreen'
 import adminScreen from './components/screens/adminScreen'
 import userScreen from './components/screens/userScreen'
 import driverScreen from './components/screens/driverMainPage'
 import MapDetailComponent from './components/mapDetailComponent'
 import DriverDetailComponent from './components/driverDetailComponent'
-
 import MapDetailHeader from './components/shared/mapDetailHeader'
 import MarkerEditHeader from './components/shared/markerEditHeader'
-
-
 import MarkerEdit from './components/markerEdit'
 import React from 'react';
-
-
-
+import example from './components/example2';
+//import example from './components/example'
 
 
 const navigator = createStackNavigator({
 
-
     Login: {
         screen: LoginScreen,
-        navigationOptions:{
-            headerShown:false
+        navigationOptions: {
+            headerShown: false
         },
     },
     Register: {
         screen: RegisterScreen,
-        navigationOptions:{
-            headerShown:false
+        navigationOptions: {
+            headerShown: false
         },
     },
-   
-    
     AdminHome: {
         screen: adminScreen,
-        navigationOptions:{
-            headerShown:false
+        navigationOptions: {
+            headerShown: false
         },
-    }, 
-    
-    UserHome:{
+    },
+    UserHome: {
         screen: userScreen,
-        navigationOptions:{
-            headerShown:false
+        navigationOptions: {
+            headerShown: false
         },
     },
-
-    DriverHome:{
+    DriverHome: {
         screen: driverScreen,
-        navigationOptions:{
-            headerShown:false
+        navigationOptions: {
+            headerShown: false
         },
     },
-    
-    
-    MarkerDetail:{
+    MarkerDetail: {
         screen: MapDetailComponent,
-    
-        navigationOptions:{
+
+        navigationOptions: {
             headerTitle: () => <MapDetailHeader />,
             headerLeft: () => null,
-            headerStyle:{
-                backgroundColor:'#003f5c'
+            headerStyle: {
+                backgroundColor: '#003f5c'
             }
         },
     },
-    
-    MarkerEdit:{
+    MarkerEdit: {
         screen: MarkerEdit,
-    
-        navigationOptions:{
+
+        navigationOptions: {
             headerTitle: () => <MarkerEditHeader />,
             headerLeft: () => null,
-            headerStyle:{
-                backgroundColor:'#003f5c'
+            headerStyle: {
+                backgroundColor: '#003f5c'
             }
         },
     },
-    
-    DriverDetail:{
+    DriverDetail: {
         screen: DriverDetailComponent,
-        navigationOptions:{
+        navigationOptions: {
             headerTitle: () => <MarkerEditHeader />,
             headerLeft: () => null,
-            headerStyle:{
-                backgroundColor:'#003f5c'
+            headerStyle: {
+                backgroundColor: '#003f5c'
             }
         },
-        
     },
+    Example: {
+        screen: example,
+        navigationOptions: {
+            headerShown: false
+        },
+    }
 
-}, 
 
-{
-    initialRouteName: 'Login', 
-});
+},
+
+    {
+        //initialRouteName: 'Example',
+        initialRouteName: 'Login',
+    });
 
 export default createAppContainer(navigator);

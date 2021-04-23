@@ -44,7 +44,7 @@ const MarkerEdit = (props) => {
 
     const updateRec = () => {
         console.log(newInfo);
-        fetch('http://192.168.1.4/backend/update.php', {
+        fetch('http://192.168.1.2/backend/update.php', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

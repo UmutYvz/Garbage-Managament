@@ -20,7 +20,7 @@ export default class driverScreen extends React.Component {
 
   componentDidMount() {
     //fetch('https://my-json-server.typicode.com/UmutYvz/JSONHOLDER/report')
-    fetch('http://192.168.1.4/backend/get_drivers.php')
+    fetch('http://192.168.1.2/backend/get_drivers.php')
       .then(res => res.json())
       .then(data => {
         console.log(data)
@@ -100,7 +100,7 @@ export default class driverScreen extends React.Component {
           <FlatList
             data={this.state.dataSource}
             renderItem={this._renderItem}
-            keyExtractor={(item, index) => index}
+            keyExtractor={(item, index) => index.toString()}
           />
 
         </View>

@@ -84,6 +84,9 @@ web-build/
 #android manifest
 android/app/src/main/AndroidManifest.xml
 
+#debug.keystore
+android/app/debug.keystore
+
 
 #IDE files
 android/app/libs

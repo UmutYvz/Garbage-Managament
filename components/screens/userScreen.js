@@ -11,8 +11,6 @@ import { DrawerContent } from '../controllers/UserDrawerContent'
 
 const Drawer = createDrawerNavigator();
 
-
-
 export default function App(props) {
 
   const info = props.navigation.state.params.info;

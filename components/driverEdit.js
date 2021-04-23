@@ -26,7 +26,7 @@ const DriverEdit = (props) => {
 
     const updateRec = () => {
         console.log(newInfo);
-        fetch('http://192.168.1.4/backend/update_driver.php', {
+        fetch('http://192.168.1.2/backend/update_driver.php', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

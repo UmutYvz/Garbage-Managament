@@ -23,4 +23,8 @@ target 'garbageManagement' do
   #  end
   pod 'RNExitApp', :path => '../node_modules/react-native-exit-app'
 
+  pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
+
+  pod 'react-native-location', :path => '../node_modules/react-native-location'
+
 end

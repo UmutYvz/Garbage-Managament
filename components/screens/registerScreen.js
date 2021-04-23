@@ -47,7 +47,7 @@ export default class RegisterScreen extends Component {
     }
     else {
 
-      fetch('http://192.168.1.4/backend/register.php', {
+      fetch('http://192.168.1.2/backend/register.php', {
         method: 'POST',
         header: {
           'Accept': 'application/json',
@@ -67,8 +67,7 @@ export default class RegisterScreen extends Component {
       .then((response) => response.text())
       .then((responseJson) => {
           if (responseJson === 'inserted') {
-            // redirect to profile page
-                 
+              
           }else {
             alert("Successfully Registered");
             this.props.navigation.replace('Login')    
