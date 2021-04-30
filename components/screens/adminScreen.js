@@ -10,11 +10,7 @@ import ASetRouteScreen from './adminPages/ASetRouteScreen'
 import ACommentsScreen from './adminPages/ACommentsScreen'
 import AAddDriverScreen from './adminPages/AAddDriverScreen'
 import { DrawerContent } from '../controllers/AdminDrawerContent'
-import MapDetailComponent from '../mapDetailComponent'
-import MarkerEdit from '../markerEdit'
-import DriverEdit from '../driverEdit'
-import DriverDetailComponent from '../driverDetailComponent'
-import RouteScreen from '../routeScreen'
+
 
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -37,15 +33,10 @@ export default function App(props) {
         <Drawer.Screen name="AManageDriverScreen" component={AManageDriverScreen} />
         <Drawer.Screen name="AManageBinScreen" component={AManageBinScreen} />
         <Drawer.Screen name="AAddBinScreen" component={AAddBinScreen} />
-        <Drawer.Screen name="AAddDriverScreen" component={AAddDriverScreen} />
+        {/* <Drawer.Screen name="AAddDriverScreen" component={AAddDriverScreen} /> */}
         <Drawer.Screen name="AReportScreen" component={AReportScreen} />
         <Drawer.Screen name="ASetRouteScreen" component={ASetRouteScreen} />
-        <Drawer.Screen name="Route" component={RouteScreen} />
         <Drawer.Screen name="ACommentsScreen" component={ACommentsScreen} />
-        <Drawer.Screen name="MarkerDetail" component={MapDetailComponent} />
-        <Drawer.Screen name="MarkerEdit" component={MarkerEdit} />
-        <Drawer.Screen name="DriverEdit" component={DriverEdit} />
-        <Drawer.Screen name="DriverDetail" component={DriverDetailComponent} />
 
       </Drawer.Navigator>
     </NavigationContainer>

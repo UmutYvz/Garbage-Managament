@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Alert, BackHandler, Text } from 'react-native';
 import { Avatar, Title, Caption, Drawer, } from 'react-native-paper';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
@@ -58,10 +58,10 @@ export function DrawerContent(props) {
                                 <FontAwesomeIcon icon={faRoad} color='#28587D' size={size} />
                             )}
                             label="Aktif Rota"
-                            onPress={() => { props.navigation.navigate('DJobsScreen', { info : props.screenProps.info }) }}
+                            onPress={() => { props.navigation.navigate('DJobsScreen', { info: props.screenProps.info }) }}
                         />
                     </Drawer.Section>
-                    <Drawer.Section style={styles.bottomDrawerSection}>
+                    {/* <Drawer.Section style={styles.bottomDrawerSection}>
                         <DrawerItem
                             icon={({ color, size }) => (
                                 <FontAwesomeIcon icon={faWrench} color='#28587D' size={size} />
@@ -69,7 +69,7 @@ export function DrawerContent(props) {
                             label="Konteyner Güncelle"
                             onPress={() => { props.navigation.navigate('DUpdateBinScreen') }}
                         />
-                    </Drawer.Section>
+                    </Drawer.Section> */}
                     <Drawer.Section style={styles.bottomDrawerSection}>
                         <DrawerItem
                             icon={({ color, size }) => (

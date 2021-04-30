@@ -1,14 +1,20 @@
-import { StyleSheet, TouchableHighlight, Text, View, TouchableOpacity, Dimensions } from 'react-native';
-import React from 'react';
+import { StyleSheet, TouchableHighlight, Text, View, BackHandler, Dimensions, Alert, Image } from 'react-native';
+import React, { Component } from 'react';
 import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import MapViewDirections from 'react-native-maps-directions';
 import axios from 'axios';
+import * as Permissions from 'expo-permissions'
+import * as Location from 'expo-location'
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faMapMarker } from '@fortawesome/free-solid-svg-icons';
+import { text } from '@fortawesome/fontawesome-svg-core';
+
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.015;
 const LONGITUDE_DELTA = 0.015;
-const GOOGLE_MAPS_APIKEY = '';
+const GOOGLE_MAPS_APIKEY = 'AIzaSyBXnVFxXNXHZ0G8qQvsokRCQD9uWKdDppQ';
 
 export default class DJobsScreen extends React.Component {
   constructor(props) {
@@ -17,52 +23,105 @@ export default class DJobsScreen extends React.Component {
     this.state = {
       reports: [],
       coordinates: [],
-
       origin: { latitude: 0, longitude: 0 },
-      destination: { latitude: 0, longitude: 0 },
+      destination: { latitude: '0', longitude: '0' },
       waypoints: { latitude: 0, longitude: 0 },
       longitude: 0,
       latitude: 0,
-      user_id: 0
+      user_id: this.props.route.params.info.id,
+      timeout: 0,
+      isLoaded: false,
+      count: 0,
+      deleted: false
+
     };
 
-
+    this.goToMarkerDetail = this.goToMarkerDetail.bind(this);
     this.mapView = null;
   }
 
+
+
+  backAction = () => {
+    this.props.navigation.goBack()
+    return true;
+  };
+
   componentDidMount() {
-    //console.log(this.props.route.params.info)
+    this.backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      this.backAction
+    );
+    try {
+      this._getLocationAsync();
+    } catch (error) {
+      console.log(error)
+    }
+
+    this.state.timeout = setInterval(() => {
+      this.currentMarker();
+      this._getLocationAsync();
+    }, 3000)
     this.getParams();
-    //this.interval = setInterval(this.getParams, 30000);
+    this.interval = setInterval(this.getParams, 30000);
+
   }
 
+  test = () => console.log(this.state.user_id)
   componentWillUnmount() {
-    //clearInterval(this.interval);
+    clearInterval(this.interval);
   }
+
+  _getLocationAsync = async () => {
+
+    try {
+
+      let { status } = await Permissions.askAsync(Permissions.LOCATION);
+      if (status !== 'granted') {
+        this.state({
+          errorMessage: 'İzin reddedildi'
+        });
+      }
+
+      let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
+      this.setState({ location });
+      const copyOrigin = { ...this.state.destination }
+      copyOrigin.latitude = location.coords.latitude
+      copyOrigin.longitude = location.coords.longitude
+      this.setState({ origin: copyOrigin })
+      this.setState({ isLoaded: true })
+
+    } catch (error) {
+      console.log(error)
+    }
+
+
+
+  }
+
+
+
 
   getParams = () => {
-    //console.log("sdfsdfd",this.props.route.params.info)
+
     axios.post('http://192.168.1.2/backend/get_driver_route.php', {
-      id: this.props.route.params.info.id,
+      id: this.state.user_id,
     }).then(res => {
-      //console.log(res.data)
       const reports = res.data;
       this.setState({ reports });
       this.setState({
         longitude: reports[1].lon,
         latitude: reports[1].lat
       })
-      //console.log(reports[1]);
+      // console.log(reports[1]);
 
       const copyDestionation = { ...this.state.destination }
       copyDestionation.latitude = reports[reports.length - 1].lat
       copyDestionation.longitude = reports[reports.length - 1].lon
       this.setState({ destination: copyDestionation })
 
-      const copyOrigin = { ...this.state.destination }
-      copyOrigin.latitude = reports[0].lat
-      copyOrigin.longitude = reports[0].lon
-      this.setState({ origin: copyOrigin })
+
+
 
       let coords = []
       reports.map(report =>
@@ -70,16 +129,36 @@ export default class DJobsScreen extends React.Component {
       )
       //console.log(coords)
       this.setState({ coordinates: coords })
-      //console.log(this.state.coordinates)
-
-      console.log("Yeniden geldi.")
-
+      // console.log(coords)
+      // console.log("Veriler değişti.")
+      console.log('Güncel...');
+      this.setState({ count: this.state.count + 1 })
     })
+  }
+
+  goToMarkerDetail(id) {
+    this.state.reports.forEach(rapor => {
+      if (rapor.id == id) {
+        this.props.navigation.navigate('MarkerDetail', {
+          id: rapor.id,
+          adress: rapor.address_m,
+          street: rapor.street,
+          district: rapor.district,
+          city: rapor.city,
+          country: rapor.country,
+          info: rapor.info,
+          lon: rapor.lon,
+          lat: rapor.lat,
+        })
+      } else {
+        console.log("bulunamadı")
+      }
+    });
   }
 
   renderMarkers = () => {
 
-    return (
+    return ((
       this.state.reports.map(report =>
         <MapView.Marker
           key={report.id}
@@ -100,8 +179,8 @@ export default class DJobsScreen extends React.Component {
             </TouchableHighlight>
           </MapView.Callout>
 
-        </MapView.Marker>
-      )
+        </MapView.Marker>)
+    )
     )
   }
 
@@ -114,10 +193,13 @@ export default class DJobsScreen extends React.Component {
           destination={this.state.destination}
           apikey={GOOGLE_MAPS_APIKEY}
           strokeWidth={3}
-          strokeColor="hotpink"
+          strokeColor="#ADC3FF"
           optimizeWaypoints={true}
           onStart={(params) => {
+            // console.log(typeof params.waypoints)
+            // console.log(typeof this.state.destination)
             console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
+            console.log(this.state.count)
           }}
           onReady={result => {
 
@@ -151,30 +233,74 @@ export default class DJobsScreen extends React.Component {
     });
   }
 
-  /**/
+  currentMarker = () => {
 
+    const bins = this.state.reports;
+
+    const testLoc = this.state.origin;
+    bins.map(bin => {
+      if (bin.lat < (testLoc.latitude + 0.0001) && bin.lat > (testLoc.latitude - 0.0001) && bin.lon < (testLoc.longitude + 0.0001) && bin.lon > (testLoc.longitude - 0.0001)) {
+        axios.post('http://192.168.1.2/backend/feedback.php', {
+          id: bin.id
+        }).then(
+          console.log("Başarıyla silindi")
+        ).catch(console.error);
+        const index = bins.findIndex(item => item.id === bin.id)
+        bins.splice(index, 1)
+
+      }
+    })
+
+
+    return (
+      <MapView.Marker
+        key={0}
+        coordinate={{
+          latitude: parseFloat(this.state.origin.latitude),
+          longitude: parseFloat(this.state.origin.longitude)
+        }}
+        title={"Şuan buradasınız."}
+      >
+        <FontAwesomeIcon icon={faMapMarker} color='#4285F4' size={32} />
+      </MapView.Marker >
+    )
+  }
 
   render() {
 
     return (
-      <MapView
+      this.state.isLoaded ?
+        (<View style={{ flex: 1 }}>
 
-        initialRegion={{
-          latitude: parseFloat(this.state.latitude),
-          longitude: parseFloat(this.state.longitude),
-          latitudeDelta: LATITUDE_DELTA,
-          longitudeDelta: LONGITUDE_DELTA,
-        }}
-        style={StyleSheet.absoluteFill}
-        ref={c => this.mapView = c}
-        onPress={this.onMapPress}
-      >
+          <MapView
 
-        {this.renderMarkers()}
-        {this.renderDirection()}
+            initialRegion={{
+              latitude: parseFloat(this.state.latitude),
+              longitude: parseFloat(this.state.longitude),
+              latitudeDelta: LATITUDE_DELTA,
+              longitudeDelta: LONGITUDE_DELTA,
+            }}
+            style={StyleSheet.absoluteFill}
+            ref={c => this.mapView = c}
+            onPress={this.onMapPress}
+          >
+            {this.currentMarker()}
+            {this.renderMarkers()}
+            {this.renderDirection()}
+
+          </MapView>
 
 
-      </MapView>
+        </View>) :
+        (<View >
+          <View style={styles.loading}>
+            <Image
+              source={require('../../shared/loading.gif')}
+            />
+          </View>
+        </View>)
+
+
     );
   }
 }
@@ -185,6 +311,14 @@ module.exports = DJobsScreen;
 /* */
 
 const styles = StyleSheet.create({
+  loading: {
+    alignItems: 'center',
+    marginTop: '50%'
+  },
+  button: {
+    position: 'relative',
+    top: 700
+  },
   mcontainer: {
     flex: 1,
     //backgroundColor: '#caf0e9',

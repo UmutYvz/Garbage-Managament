@@ -70,6 +70,7 @@ export default class AAddDriverScreen extends React.Component {
                 }).then((response) => response.text())
                     .then((responseJson) => {
                         console.log(responseJson);
+                        this.props.navigation.replace('DriverScreen')
                     }).catch((error) => {
                         console.error(error)
                     }).done();

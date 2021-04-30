@@ -16,7 +16,7 @@ const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.015;
 const LONGITUDE_DELTA = 0.015;
-const GOOGLE_MAPS_APIKEY = '';
+const GOOGLE_MAPS_APIKEY = 'AIzaSyBXnVFxXNXHZ0G8qQvsokRCQD9uWKdDppQ';
 
 export default class routeScreen extends React.Component {
     constructor(props) {
@@ -41,7 +41,7 @@ export default class routeScreen extends React.Component {
     }
 
     backAction = () => {
-
+        this.props.navigation.goBack()
         return true;
     };
 
@@ -222,6 +222,18 @@ export default class routeScreen extends React.Component {
     }
 
     currentMarker = () => {
+        const bins = this.state.reports;
+        const testLoc = this.state.origin;
+        bins.map(bin => {
+            if (bin.lat < (testLoc.latitude + 0.00005) && bin.lat > (testLoc.latitude - 0.00005)) {
+                axios.post('http://192.168.1.2/backend/feedback.php', {
+                    id: bin.id
+                }).then(
+                    console.log("Başarıyla silindi")
+                ).catch(console.error);
+            }
+
+        })
         return (
             <MapView.Marker
                 key={0}

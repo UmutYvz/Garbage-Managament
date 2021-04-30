@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, View, Text, TouchableHighlight, TouchableOpacity, SafeAreaView, ScrollView, Image, Alert } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, View, BackHandler, Text, TouchableHighlight, TouchableOpacity, SafeAreaView, ScrollView, Image, Alert } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faEdit, faTrashAlt, faAngleLeft } from '@fortawesome/free-solid-svg-icons'
 
@@ -8,8 +8,21 @@ const driverDetailComponent = (props) => {
   const { state } = props.navigation;
   const info = props.route.params.item
 
+  useEffect(() => {
+    console.log(info)
+    return () => {
+      // Anything in here is fired on component unmount.
+      console.log("Driver detaydan çıkılıyor.")
+    }
+  })
+
+
+
+
   const deleteData = (id) => {
     console.log(info.markerData);
+
+
     fetch('http://192.168.1.2/backend/delete_driver.php', {
       method: 'POST',
       headers: {
@@ -22,7 +35,8 @@ const driverDetailComponent = (props) => {
     }).then((response) => response.text())
       .then((responseJson) => {
         console.log(responseJson);
-        Alert.alert("Kayıt Silindi.")
+        Alert.alert("Kayıt Silindi.");
+        props.navigation.pop();
       }).catch((error) => {
         console.error(error)
       }).done();
@@ -31,7 +45,7 @@ const driverDetailComponent = (props) => {
 
 
   function goBack() {
-    props.navigation.goBack(null)
+    props.navigation.pop()
   }
 
 
@@ -44,7 +58,7 @@ const driverDetailComponent = (props) => {
       <View style={styles.header}>
         <Text style={styles.headerText}>SÜRÜCÜ DETAY</Text>
         <TouchableOpacity style={{ position: 'absolute', top: 10, left: 10 }}
-          onPress={() => { props.navigation.goBack(null) }}
+          onPress={() => { props.navigation.pop() }}
         >
           <FontAwesomeIcon icon={faAngleLeft} color='white' size={32} />
         </TouchableOpacity>
@@ -66,7 +80,7 @@ const driverDetailComponent = (props) => {
                   fontWeight: 'bold',
                   marginLeft: 8,
                   marginTop: 7
-                }}> {info.fullname}</Text>
+                }}> {info.full_name}</Text>
               </View>
 
               <View style={styles.headerLowerLower}>
@@ -106,7 +120,7 @@ const driverDetailComponent = (props) => {
                 <Text style={styles.infoText}>T.C. No: </Text>
               </View>
               <View style={styles.infoRight}>
-                <Text style={styles.infoParam}>{info.tcno}</Text>
+                <Text style={styles.infoParam}>{info.tc}</Text>
               </View>
             </View>
             <View style={styles.infoItem}>
@@ -117,20 +131,13 @@ const driverDetailComponent = (props) => {
                 <Text style={styles.infoParam}>{info.birthday}</Text>
               </View>
             </View>
-            <View style={styles.infoItem}>
-              <View style={styles.infoLeft}>
-                <Text style={styles.infoText}>Doğum Yer: </Text>
-              </View>
-              <View style={styles.infoRight}>
-                <Text style={styles.infoParam}>{info.birthplace}</Text>
-              </View>
-            </View>
+
             <View style={styles.infoItem}>
               <View style={styles.infoLeft}>
                 <Text style={styles.infoText}>İlk İş Günü: </Text>
               </View>
               <View style={styles.infoRight}>
-                <Text style={styles.infoParam}>{info.startday}</Text>
+                <Text style={styles.infoParam}>{info.start_day}</Text>
               </View>
             </View>
 
@@ -147,7 +154,7 @@ const driverDetailComponent = (props) => {
                 <Text style={styles.infoText}> Telefon: </Text>
               </View>
               <View style={styles.infoRight}>
-                <Text style={styles.infoParam}>{info.emergencyphone}</Text>
+                <Text style={styles.infoParam}>{info.emergency_phone}</Text>
               </View>
             </View>
             <View style={styles.infoItem}>
@@ -155,17 +162,10 @@ const driverDetailComponent = (props) => {
                 <Text style={styles.infoText}> İsim: </Text>
               </View>
               <View style={styles.infoRight}>
-                <Text style={styles.infoParam}>{info.emergencycontact}</Text>
+                <Text style={styles.infoParam}>{info.emergency_contact}</Text>
               </View>
             </View>
-            <View style={styles.infoItem}>
-              <View style={styles.infoLeft}>
-                <Text style={styles.infoText}> İlişki: </Text>
-              </View>
-              <View style={styles.infoRight}>
-                <Text style={styles.infoParam}>{info.emergencycontactrelation}</Text>
-              </View>
-            </View>
+
 
           </ScrollView>
 
@@ -177,7 +177,10 @@ const driverDetailComponent = (props) => {
 
 
       <View style={styles.buttons}>
-        <TouchableHighlight style={styles.leftB} onPress={() => props.navigation.navigate('DriverEdit', { info })}>
+        <TouchableHighlight style={styles.leftB} onPress={() => {
+          props.navigation.pop()
+          props.navigation.navigate('DriverEdit', { info })
+        }}>
           <View style={styles.ltouchable}>
             <FontAwesomeIcon icon={faEdit} color='white' size={30} />
           </View>

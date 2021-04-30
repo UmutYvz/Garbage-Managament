@@ -3,7 +3,7 @@ import { View, StyleSheet, Alert, BackHandler } from 'react-native';
 import { Avatar, Title, Caption, Drawer, Text } from 'react-native-paper';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faHome, faSignOutAlt, faEnvelope, faComment } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faSignOutAlt, faEnvelope, faComment, faExchangeAlt } from '@fortawesome/free-solid-svg-icons'
 
 
 export function DrawerContent(props) {
@@ -66,6 +66,15 @@ export function DrawerContent(props) {
                             )}
                             label="Yorumlarım"
                             onPress={() => { props.navigation.navigate('UMyComments') }}
+                        />
+                    </Drawer.Section>
+                    <Drawer.Section style={styles.bottomDrawerSection}>
+                        <DrawerItem
+                            icon={({ color, size }) => (
+                                <FontAwesomeIcon icon={faExchangeAlt} color='#28587D' size={size} />
+                            )}
+                            label="Geri Bildirim"
+                            onPress={() => { props.navigation.navigate('UFeedBack') }}
                         />
                     </Drawer.Section>
 

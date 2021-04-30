@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Alert } from 'react-native';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import MapView from 'react-native-maps';
@@ -9,6 +9,12 @@ const MarkerEdit = (props) => {
 
     const { state } = props.navigation;
 
+    useEffect(() => {
+        return () => {
+            // Anything in here is fired on component unmount.
+            console.log("marker editten çıkılıyor.")
+        }
+    })
 
     const info = {
         markerData: {

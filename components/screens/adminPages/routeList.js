@@ -1,10 +1,9 @@
-import { StyleSheet, BackHandler, FlatList, Text, View, TouchableOpacity, TouchableHighlight, ActivityIndicator } from 'react-native';
+import { StyleSheet, FlatList, Text, View, TouchableOpacity, TouchableHighlight, ActivityIndicator } from 'react-native';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faRedoAlt, faPlus, faPhoneAlt, faCalendarCheck, faEnvelopeOpen, faAngleLeft } from '@fortawesome/free-solid-svg-icons'
+import { faRedoAlt, faPlus, faPhoneAlt, faCalendarCheck, faEnvelopeOpen, faAngleLeft, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 
-export default class driverScreen extends React.Component {
-
+export default class routeList extends React.Component {
   constructor(props) {
     super(props);
 
@@ -18,11 +17,10 @@ export default class driverScreen extends React.Component {
 
 
 
-
-
   componentDidMount() {
+
     //fetch('https://my-json-server.typicode.com/UmutYvz/JSONHOLDER/report')
-    fetch('http://192.168.1.2/backend/get_drivers.php')
+    fetch('http://192.168.1.2/backend/get_driver_with_route.php')
       .then(res => res.json())
       .then(data => {
         //console.log(data)
@@ -32,20 +30,12 @@ export default class driverScreen extends React.Component {
         })
       })
       .catch(console.error)
-
   }
 
-
-  isEmpty = (obj) => {
-    if(typeof obj === 'undefined')
-      return false;
-    else if(Object.keys(obj).length === 0)
-      return true;
-  }
 
 
   goToDriverDetail(item) {
-    this.props.navigation.push('DriverDetailComponent', { item })
+    this.props.navigation.navigate('MapScreen', { item })
   }
 
 
@@ -68,8 +58,15 @@ export default class driverScreen extends React.Component {
       <View style={styles.row3}>
         <FontAwesomeIcon icon={faEnvelopeOpen} style={styles.icons} />
         <Text style={styles.row3Text}>{item.email}</Text>
+
+        {item.route_id != null ?
+          <FontAwesomeIcon icon={faCheckCircle} style={{
+            color: '#00f950',
+            marginLeft: 225
+          }} /> : null}
       </View>
     </TouchableOpacity>
+
 
   );
 
@@ -87,10 +84,10 @@ export default class driverScreen extends React.Component {
         <View style={styles.container}>
 
           <View style={styles.header}>
-            <Text style={styles.headerText}>SÜRÜCÜ LİSTESİ</Text>
+            <Text style={styles.headerText}>AKTİF SÜRÜCÜ LİSTESİ</Text>
             <TouchableHighlight onPress={() => { this.componentDidMount(); }}>
               <View style={styles.rtouchable}>
-                <FontAwesomeIcon icon={faRedoAlt} color='white' size={25} />
+                <FontAwesomeIcon icon={faRedoAlt} color='white' size={23} />
               </View>
             </TouchableHighlight>
             <TouchableOpacity style={{ position: 'absolute', top: 10, left: 10 }}
@@ -102,7 +99,7 @@ export default class driverScreen extends React.Component {
           </View>
 
 
-          <TouchableHighlight style={styles.rightB} onPress={() => { this.props.navigation.replace('AddDriver') }}>
+          <TouchableHighlight style={styles.rightB} onPress={() => { this.props.navigation.navigate('AAddDriverScreen') }}>
             <FontAwesomeIcon icon={faPlus} color='white' size={40} />
           </TouchableHighlight>
 
@@ -119,7 +116,7 @@ export default class driverScreen extends React.Component {
   }
 }
 
-module.exports = driverScreen;
+module.exports = routeList;
 
 
 const styles = StyleSheet.create({
@@ -142,10 +139,11 @@ const styles = StyleSheet.create({
 
   headerText: {
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 16,
     color: '#333',
     letterSpacing: 1,
-    color: '#E1ECF5'
+    color: '#E1ECF5',
+    marginLeft: 24
   },
   row1: {
     marginBottom: 6

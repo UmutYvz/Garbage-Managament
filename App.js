@@ -5,14 +5,9 @@ import RegisterScreen from './components/screens/registerScreen'
 import adminScreen from './components/screens/adminScreen'
 import userScreen from './components/screens/userScreen'
 import driverScreen from './components/screens/driverMainPage'
-import MapDetailComponent from './components/mapDetailComponent'
-import DriverDetailComponent from './components/driverDetailComponent'
-import MapDetailHeader from './components/shared/mapDetailHeader'
 import MarkerEditHeader from './components/shared/markerEditHeader'
-import MarkerEdit from './components/markerEdit'
 import React from 'react';
 import example from './components/example2';
-//import example from './components/example'
 
 
 const navigator = createStackNavigator({
@@ -47,51 +42,17 @@ const navigator = createStackNavigator({
             headerShown: false
         },
     },
-    MarkerDetail: {
-        screen: MapDetailComponent,
-
-        navigationOptions: {
-            headerTitle: () => <MapDetailHeader />,
-            headerLeft: () => null,
-            headerStyle: {
-                backgroundColor: '#003f5c'
-            }
-        },
-    },
-    MarkerEdit: {
-        screen: MarkerEdit,
-
-        navigationOptions: {
-            headerTitle: () => <MarkerEditHeader />,
-            headerLeft: () => null,
-            headerStyle: {
-                backgroundColor: '#003f5c'
-            }
-        },
-    },
-    DriverDetail: {
-        screen: DriverDetailComponent,
-        navigationOptions: {
-            headerTitle: () => <MarkerEditHeader />,
-            headerLeft: () => null,
-            headerStyle: {
-                backgroundColor: '#003f5c'
-            }
-        },
-    },
     Example: {
         screen: example,
         navigationOptions: {
             headerShown: false
         },
     }
-
-
 },
 
     {
-        //initialRouteName: 'Example',
-        initialRouteName: 'Login',
+        initialRouteName: 'Example',
+        //initialRouteName: 'Login',
     });
 
 export default createAppContainer(navigator);

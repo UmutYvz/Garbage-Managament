@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { KeyboardAvoidingView } from 'react-native';
 import { Alert } from 'react-native';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import DatePicker from 'react-native-datepicker'
 
 const DriverEdit = (props) => {
 
@@ -9,23 +11,30 @@ const DriverEdit = (props) => {
 
     const info = props.route.params.info
 
+    useEffect(() => {
+        console.log(info);
+        return () => {
+            // Anything in here is fired on component unmount.
+            console.log("Driver editten çıkılıyor.")
+        }
+    })
+
     const newInfo = {
         id: info.id,
-        fullName: info.fullname,
-        address_d: info.address_d,
-        phone: info.phone,
+        fullName: info.full_name,
         email: info.email,
-        tcno: info.tcno,
+        address_d: info.address,
+        phone: info.phone,
         birthday: info.birthday,
-        birthplace: info.birthplace,
-        startDay: info.startday,
-        emergencyPhone: info.emergencyphone,
-        emergencyContact: info.emergencycontact,
-        emergencyContactRelation: info.emergencycontactrelation,
+        emergencyPhone: info.emergency_phone,
+        emergencyContact: info.emergency_contact,
+        tcno: info.tc,
+        startDay: info.start_day,
+
     };
 
     const updateRec = () => {
-        console.log(newInfo);
+
         fetch('http://192.168.1.2/backend/update_driver.php', {
             method: 'POST',
             headers: {
@@ -39,18 +48,15 @@ const DriverEdit = (props) => {
                 phone: newInfo.phone,
                 email: newInfo.email,
                 tcno: newInfo.tcno,
-                birthday: newInfo.birthday,
-                birthplace: newInfo.birthplace,
-                startDay: newInfo.startDay,
                 emergencyPhone: newInfo.emergencyPhone,
                 emergencyContact: newInfo.emergencyContact,
-                emergencyContactRelation: newInfo.emergencyContactRelation,
             })
         }).then((response) => response.text())
             .then((responseJson) => {
                 console.log(responseJson);
                 console.log(newInfo)
                 Alert.alert("Kayıt güncellendi.")
+                props.navigation.navigate('DriverScreen', { newInfo: info })
             }).catch((error) => {
                 console.error(error)
             }).done();
@@ -59,7 +65,7 @@ const DriverEdit = (props) => {
 
 
     return (
-        <View style={{ flex: 1 }}>
+        <KeyboardAvoidingView style={{ flex: 1 }}>
             <ScrollView style={styles.container}>
                 <View style={styles.header}>
                     <Text style={styles.headerText}>SÜRÜCÜ DÜZENLE</Text>
@@ -77,7 +83,7 @@ const DriverEdit = (props) => {
                     <View style={styles.inputView} >
                         <TextInput
                             style={styles.inputText}
-                            placeholder={"İsim: " + info.fullname}
+                            placeholder={"İsim: " + info.full_name}
                             placeholderTextColor="#003f5c"
                             onChangeText={(e) => newInfo.fullName = e}
                         />
@@ -101,37 +107,14 @@ const DriverEdit = (props) => {
                     <View style={styles.inputView} >
                         <TextInput
                             style={styles.inputText}
-                            placeholder={"T.C. No: " + info.tcno}
+                            placeholder={"T.C. No: " + info.tc}
                             placeholderTextColor="#003f5c"
                             onChangeText={(e) => newInfo.tcno = e}
                         />
                     </View>
 
 
-                    <View style={styles.inputView} >
-                        <TextInput
-                            style={styles.inputText}
-                            placeholder={"Doğum Günü:" + info.birthday}
-                            placeholderTextColor="#003f5c"
-                            onChangeText={(e) => newInfo.birthday = e}
-                        />
-                    </View>
-                    <View style={styles.inputView} >
-                        <TextInput
-                            style={styles.inputText}
-                            placeholder={"Doğum Yeri: " + info.birthplace}
-                            placeholderTextColor="#003f5c"
-                            onChangeText={(e) => newInfo.birthplace = e}
-                        />
-                    </View>
-                    <View style={styles.inputView} >
-                        <TextInput
-                            style={styles.inputText}
-                            placeholder={"İlk İş Günü: " + info.startday}
-                            placeholderTextColor="#003f5c"
-                            onChangeText={(e) => newInfo.startDay = e}
-                        />
-                    </View>
+
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 12, marginBottom: 12 }}>
                         <View style={{ flex: 0.5, height: 1, backgroundColor: '#003f5c' }} />
                         <View>
@@ -142,7 +125,7 @@ const DriverEdit = (props) => {
                     <View style={styles.inputView} >
                         <TextInput
                             style={styles.inputText}
-                            placeholder={"İsim: "+info.emergencycontact}
+                            placeholder={"İsim: " + info.emergency_contact}
                             placeholderTextColor="#003f5c"
                             onChangeText={(e) => newInfo.emergencyContact = e}
                         />
@@ -150,29 +133,13 @@ const DriverEdit = (props) => {
                     <View style={styles.inputView} >
                         <TextInput
                             style={styles.inputText}
-                            placeholder={"İlişki: "+info.emergencycontactrelation}
-                            placeholderTextColor="#003f5c"
-                            onChangeText={(e) => newInfo.emergencyContactRelation = e}
-                        />
-                    </View>
-                    <View style={styles.inputView} >
-                        <TextInput
-                            style={styles.inputText}
-                            placeholder={"Telefon: "+info.emergencyphone}
+                            placeholder={"Telefon: " + info.emergency_phone}
                             placeholderTextColor="#003f5c"
                             onChangeText={(e) => newInfo.emergencyPhone = e}
                         />
                     </View>
 
                 </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 7 }}>
-                    <View style={{ flex: 0.5, height: 1, backgroundColor: '#003f5c' }} />
-                    <View>
-                        <Text style={{ color: '#003f5c', width: 150, textAlign: 'center', fontWeight: 'bold', letterSpacing: 1, fontSize: 18 }}>SÜRÜKLE VE KONUM SEÇ</Text>
-                    </View>
-                    <View style={{ flex: 0.5, height: 1, backgroundColor: '#003f5c' }} />
-                </View>
-
 
 
 
@@ -180,7 +147,7 @@ const DriverEdit = (props) => {
             <TouchableOpacity activeOpacity={0.8} style={styles.Btn} onPress={() => updateRec()}>
                 <Text style={styles.btnText}>GÜNCELLE</Text>
             </TouchableOpacity>
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 

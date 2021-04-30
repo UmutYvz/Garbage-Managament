@@ -29,6 +29,10 @@ export default class mapScreen extends React.Component {
       .catch(console.error)
   }
 
+  componentWillUnmount(){
+    console.log("Map Screen'den çıkılıyor.")
+  }
+
   goToMarkerDetail(id) {
 
 

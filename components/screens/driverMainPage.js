@@ -26,7 +26,6 @@ export default function App(props) {
         <Drawer.Screen name="DHomeScreen" component={DHomeScreen} />
         <Drawer.Screen name="DJobsScreen" component={DJobsScreen} />
         <Drawer.Screen name="DReportsScreen" component={DReportsScreen} />
-        <Drawer.Screen name="DUpdateBinScreen" component={DUpdateBinScreen} />
 
       </Drawer.Navigator>
     </NavigationContainer>

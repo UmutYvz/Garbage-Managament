@@ -3,6 +3,7 @@ import React from 'react';
 import UHomeScreen from './userPages/UHomeScreen'
 import UCommentsScreen from './userPages/UCommentsScreen'
 import UMyComments from './userPages/UMyComments'
+import UFeedBack from './userPages/UFeedBack'
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer'
@@ -22,6 +23,7 @@ export default function App(props) {
         <Drawer.Screen name="UHomeScreen" component={UHomeScreen} />
         <Drawer.Screen name="UCommentsScreen" component={UCommentsScreen} />
         <Drawer.Screen name="UMyComments" component={UMyComments} />
+        <Drawer.Screen name="UFeedBack" component={UFeedBack} />
 
       </Drawer.Navigator>
     </NavigationContainer>
