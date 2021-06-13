@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, View, BackHandler, Alert } from 'react-native';
+import { Text, View, BackHandler, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
@@ -32,6 +32,10 @@ export default class AHomeScreen extends React.Component {
     BackHandler.removeEventListener("hardwareBackPress", this.backAction);
   }
 
+  openDrawer = () => {
+    this.props.navigation.openDrawer();
+    console.log("bir")
+  }
 
   toggleDrawer() {
     this.props.navigation.toggleDrawer();
@@ -47,10 +51,9 @@ export default class AHomeScreen extends React.Component {
             <FontAwesomeIcon icon={faBars} size={25} color='#28587D' />
           </TouchableOpacity>
         </View>
-        <Button
-          //onPress={() => navigation.navigate('AHomeScreen')}
-          title="HomeScreen"
-        />
+        <Text>
+          Admin Kullanıcı Bilgileri
+        </Text>
       </View>
 
     );

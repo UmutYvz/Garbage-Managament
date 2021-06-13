@@ -2,9 +2,10 @@
 import DHomeScreen from '../screens/driverPages/DHomeScreen'
 import DJobsScreen from '../screens/driverPages/DJobsScreen'
 import DReportsScreen from '../screens/driverPages/DReportsScreen'
-import DUpdateBinScreen from '../screens/driverPages/DUpdateBinScreen'
-import React from 'react';
+
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import { BackHandler } from 'react-native'
 
 import { createDrawerNavigator } from '@react-navigation/drawer'
 
@@ -15,7 +16,8 @@ const Drawer = createDrawerNavigator();
 
 
 
-export default function App(props) {
+export default function App(props,{navigation}) {
+
 
   const info = props.navigation.state.params.info;
 

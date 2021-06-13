@@ -6,20 +6,27 @@ import axios from 'axios';
 import * as Permissions from 'expo-permissions'
 import * as Location from 'expo-location'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faMapMarker } from '@fortawesome/free-solid-svg-icons';
+import { faMapMarker, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { text } from '@fortawesome/fontawesome-svg-core';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { getPathLength, getDistance } from 'geolib';
 
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.015;
 const LONGITUDE_DELTA = 0.015;
-const GOOGLE_MAPS_APIKEY = 'AIzaSyBXnVFxXNXHZ0G8qQvsokRCQD9uWKdDppQ';
+const GOOGLE_MAPS_APIKEY = 'AIzaSyBNfYXMG33WjbwfkHSMgTJgYwYuF5tSqRA';
+
+const initialState = []
 
 export default class DJobsScreen extends React.Component {
+
+
+
+
   constructor(props) {
     super(props);
-
     this.state = {
       reports: [],
       coordinates: [],
@@ -32,8 +39,10 @@ export default class DJobsScreen extends React.Component {
       timeout: 0,
       isLoaded: false,
       count: 0,
-      deleted: false
-
+      deleted: false,
+      livePos: false,
+      gidilenYollar: { latitude: 0, longitude: 0 },
+      distance: [],
     };
 
     this.goToMarkerDetail = this.goToMarkerDetail.bind(this);
@@ -67,7 +76,6 @@ export default class DJobsScreen extends React.Component {
 
   }
 
-  test = () => console.log(this.state.user_id)
   componentWillUnmount() {
     clearInterval(this.interval);
   }
@@ -94,10 +102,25 @@ export default class DJobsScreen extends React.Component {
     } catch (error) {
       console.log(error)
     }
+  }
 
 
+  setDistance = (distanceCoords) => {
+
+    const lenght = getPathLength(distanceCoords)
+    console.log("mesafe:", lenght, "metre");
+
+    axios.post('http://192.168.1.2/backend/traveled_distance.php', {
+      id: this.state.user_id,
+      lenght: lenght
+    }).then(res => {
+      console.log("burda")
+      this.setState({ distance: initialState })
+    }).catch(console.error);
+    console.log("yeni state durumu  = ", this.state.distance)
 
   }
+
 
 
 
@@ -129,8 +152,15 @@ export default class DJobsScreen extends React.Component {
       )
       //console.log(coords)
       this.setState({ coordinates: coords })
-      // console.log(coords)
-      // console.log("Veriler değişti.")
+
+      let waypoints = this.state.coordinates
+
+      //console.log(waypoints)
+      //waypoints.shift()
+      waypoints.pop()
+      //console.log("yeniler:", waypoints)
+      this.setState({ waypoints: waypoints })
+
       console.log('Güncel...');
       this.setState({ count: this.state.count + 1 })
     })
@@ -149,6 +179,7 @@ export default class DJobsScreen extends React.Component {
           info: rapor.info,
           lon: rapor.lon,
           lat: rapor.lat,
+          alertPresent: false
         })
       } else {
         console.log("bulunamadı")
@@ -170,7 +201,7 @@ export default class DJobsScreen extends React.Component {
           description={report.street}
 
         >
-          <MapView.Callout tooltip onPress={() => this.goToMarkerDetail(parseInt(report.id))} >
+          <MapView.Callout tooltip >
             <TouchableHighlight style={styles.container}>
               <View>
                 <Text style={styles.upperText}>{report.info}</Text>
@@ -189,23 +220,33 @@ export default class DJobsScreen extends React.Component {
       (this.state.coordinates.length >= 2) && (
         <MapViewDirections
           origin={this.state.origin}
-          waypoints={(this.state.coordinates.length > 2) ? this.state.coordinates.slice(1, -1) : null}
+          waypoints={(this.state.waypoints.length > 0) ? (this.state.waypoints) : (null)}
           destination={this.state.destination}
           apikey={GOOGLE_MAPS_APIKEY}
           strokeWidth={3}
           strokeColor="#ADC3FF"
           optimizeWaypoints={true}
           onStart={(params) => {
-            // console.log(typeof params.waypoints)
-            // console.log(typeof this.state.destination)
+
+            let latlon = params.origin
+            let splitlatlon = latlon.split(',')
+
+            let coords = [{ latitude: 0, longitude: 0 }]
+            coords.latitude = splitlatlon[0];
+            coords.longitude = splitlatlon[1];
+            this.state.distance.push({ latitude: splitlatlon[0], longitude: splitlatlon[1] });
+
+            this.state.distance.length > 1 ? this.setDistance(this.state.distance) : console.log("koordinatlar yetersiz")
+
+            //console.log("origins -> ", this.state.distance)
             console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
-            console.log(this.state.count)
+            //console.log(params.waypoints)
           }}
           onReady={result => {
 
             console.log(`Distance: ${result.distance} km`);
             console.log(`Duration: ${result.duration} min.`);
-
+            // //console.log("coordinatlar", result.coordinates);
             this.mapView.fitToCoordinates(result.coordinates, {
               edgePadding: {
                 right: (width / 20),
@@ -216,7 +257,7 @@ export default class DJobsScreen extends React.Component {
             });
           }}
           onError={(errorMessage) => {
-            // console.log('GOT AN ERROR');
+            console.log(errorMessage)
           }}
         />
       ))
@@ -234,24 +275,6 @@ export default class DJobsScreen extends React.Component {
   }
 
   currentMarker = () => {
-
-    const bins = this.state.reports;
-
-    const testLoc = this.state.origin;
-    bins.map(bin => {
-      if (bin.lat < (testLoc.latitude + 0.0001) && bin.lat > (testLoc.latitude - 0.0001) && bin.lon < (testLoc.longitude + 0.0001) && bin.lon > (testLoc.longitude - 0.0001)) {
-        axios.post('http://192.168.1.2/backend/feedback.php', {
-          id: bin.id
-        }).then(
-          console.log("Başarıyla silindi")
-        ).catch(console.error);
-        const index = bins.findIndex(item => item.id === bin.id)
-        bins.splice(index, 1)
-
-      }
-    })
-
-
     return (
       <MapView.Marker
         key={0}
@@ -264,6 +287,51 @@ export default class DJobsScreen extends React.Component {
         <FontAwesomeIcon icon={faMapMarker} color='#4285F4' size={32} />
       </MapView.Marker >
     )
+  }
+
+  test = () => {
+
+    const bins = this.state.reports;
+    let notIn = true
+    const testLoc = this.state.origin;
+    bins.map(bin => {
+      if (bin.lat < (testLoc.latitude + 0.0001) && bin.lat > (testLoc.latitude - 0.0001) && bin.lon < (testLoc.longitude + 0.0001) && bin.lon > (testLoc.longitude - 0.0001)) {
+        Alert.alert(
+          "Çöp kutusu boşaltıldı mı?",
+          "İşlem tamamlandıysa 'Evet' butonuna dokunun.",
+          [
+            {
+              text: "Hayır",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            },
+            {
+              text: "Evet", onPress: () => {
+
+                axios.post('http://192.168.1.2/backend/feedback.php', {
+                  id: bin.id
+                }).then(
+                  console.log("Başarıyla silindi")
+                ).catch(console.error);
+                const index = bins.findIndex(item => item.id === bin.id)
+                bins.splice(index, 1)
+
+                axios.post('http://192.168.1.2/backend/driverpoint.php', {
+                  id: this.state.user_id
+                }).then(
+                  console.log("puan eklendi")
+                ).catch(console.error);
+
+
+              }
+            }
+          ]
+        );
+      }
+
+    })
+
+
   }
 
   render() {
@@ -291,7 +359,26 @@ export default class DJobsScreen extends React.Component {
           </MapView>
 
 
-        </View>) :
+          <View style={{
+            width: 180,
+            height: 60,
+            backgroundColor: '#003f5c',
+            borderRadius: 100,
+            position: 'absolute',
+            bottom: 30,
+            right: 20,
+            borderRadius: 100,
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1,
+
+          }}>
+            <TouchableOpacity onPress={() => { this.test() }} style={{ flexDirection: 'row' }} >
+              <Text style={{ marginRight: 3, color: 'white', fontSize: 20, fontWeight: 'bold', textAlign: 'center' }} >Bildirim {"\n"} Yap</Text>
+              <FontAwesomeIcon style={{ marginTop: 5 }} icon={faCheck} color='white' size={40} />
+            </TouchableOpacity>
+          </View>
+        </View >) :
         (<View >
           <View style={styles.loading}>
             <Image

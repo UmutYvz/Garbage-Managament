@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { View, StyleSheet, Alert, BackHandler } from 'react-native';
 import { Avatar, Title, Caption, Drawer, Text, } from 'react-native-paper';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
@@ -20,6 +20,11 @@ export function DrawerContent(props) {
     };
 
 
+    useEffect(() => {
+        //console.log(props.screenProps.info)
+        
+    })
+
     return (
         <View style={{ flex: 1 }}>
             <DrawerContentScrollView {...props}>
@@ -38,7 +43,7 @@ export function DrawerContent(props) {
                             </View>
                         </View>
                     </View>
-
+{/* 
                     <Drawer.Section style={styles.bottomDrawerSection, { marginTop: 20 }}>
                         <DrawerItem
                             icon={({ color, size }) => (
@@ -47,8 +52,8 @@ export function DrawerContent(props) {
                             label="Giriş"
                             onPress={() => { props.navigation.navigate('AHomeScreen') }}
                         />
-                    </Drawer.Section>
-                    <Drawer.Section style={styles.bottomDrawerSection}>
+                    </Drawer.Section> */}
+                    <Drawer.Section style={styles.bottomDrawerSection, { marginTop: 20 }}>
                         <DrawerItem
                             icon={({ color, size }) => (
                                 <FontAwesomeIcon icon={faUserEdit} color='#28587D' size={size} />
@@ -84,7 +89,7 @@ export function DrawerContent(props) {
                             onPress={() => { props.navigation.navigate('ASetRouteScreen') }}
                         />
                     </Drawer.Section>
-                    <Drawer.Section style={styles.bottomDrawerSection}>
+                    {/* <Drawer.Section style={styles.bottomDrawerSection}>
                         <DrawerItem
                             icon={({ color, size }) => (
                                 <FontAwesomeIcon icon={faComment} color='#28587D' size={size} />
@@ -92,7 +97,7 @@ export function DrawerContent(props) {
                             label="Yorumları Cevapla"
                             onPress={() => { props.navigation.navigate('ACommentsScreen') }}
                         />
-                    </Drawer.Section>
+                    </Drawer.Section> */}
                     <Drawer.Section style={styles.bottomDrawerSection}>
                         <DrawerItem
                             icon={({ color, size }) => (

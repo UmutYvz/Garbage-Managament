@@ -103,8 +103,8 @@ export default class feedbackScreen extends React.Component {
                 <View style={styles.header}>
                     <Text style={styles.headerText}>Konteyner Durum Güncelle</Text>
                     <TouchableOpacity style={{ position: 'absolute', top: 10, left: 10 }}
-                        //onPress={() => { this.props.navigation.goBack(null) }}
-                        onPress={() => this.showAlert()}
+                        onPress={() => { this.props.navigation.goBack(null) }}
+                        //onPress={() => this.showAlert()}
                     >
                         <FontAwesomeIcon icon={faAngleLeft} color='#003f5c' size={32} />
                     </TouchableOpacity>

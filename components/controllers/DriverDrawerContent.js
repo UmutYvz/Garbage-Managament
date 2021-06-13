@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, Alert, BackHandler, Text } from 'react-native';
 import { Avatar, Title, Caption, Drawer, } from 'react-native-paper';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faHome, faSignOutAlt, faBullhorn, faWrench, faExclamationTriangle, faRoad } from '@fortawesome/free-solid-svg-icons'
-
+import { Rating, AirbnbRating } from 'react-native-elements';
 
 export function DrawerContent(props) {
     const backAction = () => {
@@ -18,6 +18,13 @@ export function DrawerContent(props) {
         ]);
         return true;
     };
+
+
+
+    
+
+
+  
 
     // const [info, setInfo] = useState(0);
     // setInfo(props.screenProps.info);
@@ -43,7 +50,7 @@ export function DrawerContent(props) {
                         </View>
                     </View>
 
-                    <Drawer.Section style={styles.bottomDrawerSection, { marginTop: 20 }}>
+                    {/* <Drawer.Section style={styles.bottomDrawerSection, { marginTop: 20 }}>
                         <DrawerItem
                             icon={({ color, size }) => (
                                 <FontAwesomeIcon icon={faHome} color='#28587D' size={size} />
@@ -51,8 +58,8 @@ export function DrawerContent(props) {
                             label="Giriş"
                             onPress={() => { props.navigation.navigate('DHomeScreen') }}
                         />
-                    </Drawer.Section>
-                    <Drawer.Section style={styles.bottomDrawerSection}>
+                    </Drawer.Section> */}
+                    <Drawer.Section style={styles.bottomDrawerSection, { marginTop: 20 }}>
                         <DrawerItem
                             icon={({ color, size }) => (
                                 <FontAwesomeIcon icon={faRoad} color='#28587D' size={size} />
@@ -61,15 +68,7 @@ export function DrawerContent(props) {
                             onPress={() => { props.navigation.navigate('DJobsScreen', { info: props.screenProps.info }) }}
                         />
                     </Drawer.Section>
-                    {/* <Drawer.Section style={styles.bottomDrawerSection}>
-                        <DrawerItem
-                            icon={({ color, size }) => (
-                                <FontAwesomeIcon icon={faWrench} color='#28587D' size={size} />
-                            )}
-                            label="Konteyner Güncelle"
-                            onPress={() => { props.navigation.navigate('DUpdateBinScreen') }}
-                        />
-                    </Drawer.Section> */}
+
                     <Drawer.Section style={styles.bottomDrawerSection}>
                         <DrawerItem
                             icon={({ color, size }) => (
@@ -82,6 +81,15 @@ export function DrawerContent(props) {
 
                 </View>
             </DrawerContentScrollView>
+            <Drawer.Section style={styles.bottomDrawerSection}>
+                <View>
+                    <Text style={styles.bottomInfo}><Text style={{ color: '#848485', fontWeight: 'normal' }}>Bugüne kadar yapılan yol: </Text> {props.screenProps.info.traveled_distance/1000}km</Text>
+                    <Text style={styles.bottomInfo}><Text style={{ color: '#848485', fontWeight: 'normal' }}>Bugüne kadar toplanan çöp: </Text> {props.screenProps.info.bin_counter}</Text>
+                    
+
+
+                </View>
+            </Drawer.Section>
             <Drawer.Section style={styles.bottomDrawerSection}>
                 <DrawerItem
                     icon={({ color, size }) => (
@@ -99,6 +107,12 @@ export function DrawerContent(props) {
 const styles = StyleSheet.create({
     drawerContent: {
         flex: 1,
+    },
+    bottomInfo: {
+        fontSize: 16,
+        marginTop: 3,
+        fontWeight: 'bold',
+        color: '#28587D'
     },
     userInfoSection: {
         backgroundColor: '#E1ECF5',

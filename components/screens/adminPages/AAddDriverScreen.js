@@ -17,8 +17,8 @@ export default class AAddDriverScreen extends React.Component {
             tcno: '',
             birthday: '2021-01-01',
             startDay: '2021-01-01',
-            emergencyPhone: '',
-            emergencyContact: '',
+            emergencyPhone: 'güncelleyiniz',
+            emergencyContact: 'güncelleyiniz',
             password: ''
         }
 

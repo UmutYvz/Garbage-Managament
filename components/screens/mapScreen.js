@@ -35,8 +35,6 @@ export default class mapScreen extends React.Component {
 
   goToMarkerDetail(id) {
 
-
-
     this.state.reports.forEach(rapor => {
       if (rapor.id == id) {
         this.props.navigation.navigate('MarkerDetail', {

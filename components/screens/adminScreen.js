@@ -42,4 +42,3 @@ export default function App(props) {
     </NavigationContainer>
   );
 }
-

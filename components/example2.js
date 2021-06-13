@@ -1,53 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Image, View, Platform } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import React from 'react';
+import DropDownPicker from 'react-native-dropdown-picker';
+
+import { View, Text } from 'react-native'
 
 export default class example2 extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            image: null
+            open: false,
+            value: null,
+            items: [
+                { label: 'Apple', value: 'apple' },
+                { label: 'Banana', value: 'banana' }
+            ]
         };
+
+        this.setValue = this.setValue.bind(this);
     }
 
-    componentDidMount() {
-        () => {
-            (async () => {
-                if (Platform.OS !== 'web') {
-                    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-                    if (status !== 'granted') {
-                        alert('Sorry, we need camera roll permissions to make this work!');
-                    }
-                }
-            })();
-        }
-    }
-
-
-    pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
+    setOpen = (open) => {
+        this.setState({
+            open
         });
+    }
 
-        console.log(result);
+    setValue = (callback) => {
+        this.setState(state => ({
+            value: callback(state.value)
+        }));
+    }
 
-        if (!result.cancelled) {
-            this.setState({ image: result.uri })
-        }
-    };
+    setItems = (callback) => {
+        this.setState(state => ({
+            items: callback(state.items)
+        }));
+    }
+
     render() {
+        const { open, value, items } = this.state;
+
         return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Button title="Inside Stack" onPress={() => this.pickImage()} />
-                { this.state.image && <Image source={{ uri: this.state.image }} style={{ width: 200, height: 200 }} />}
-            </View >
+            <View style={{marginTop:50}}>
+                <DropDownPicker
+                    open={open}
+                    value={value}
+                    items={items}
+                    setOpen={this.setOpen}
+                    setValue={this.setValue}
+                    setItems={this.setItems}
+
+                />
+            </View>
+
         );
     }
-
 }
 
-module.exports = example2;

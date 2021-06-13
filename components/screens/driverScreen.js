@@ -1,7 +1,7 @@
 import { StyleSheet, BackHandler, FlatList, Text, View, TouchableOpacity, TouchableHighlight, ActivityIndicator } from 'react-native';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faRedoAlt, faPlus, faPhoneAlt, faCalendarCheck, faEnvelopeOpen, faAngleLeft } from '@fortawesome/free-solid-svg-icons'
+import { faRedoAlt, faPlus, faPhoneAlt, faCalendarCheck, faEnvelopeOpen, faAngleLeft, faRoad, faBoxOpen, faStar } from '@fortawesome/free-solid-svg-icons'
 
 export default class driverScreen extends React.Component {
 
@@ -37,9 +37,9 @@ export default class driverScreen extends React.Component {
 
 
   isEmpty = (obj) => {
-    if(typeof obj === 'undefined')
+    if (typeof obj === 'undefined')
       return false;
-    else if(Object.keys(obj).length === 0)
+    else if (Object.keys(obj).length === 0)
       return true;
   }
 
@@ -68,6 +68,16 @@ export default class driverScreen extends React.Component {
       <View style={styles.row3}>
         <FontAwesomeIcon icon={faEnvelopeOpen} style={styles.icons} />
         <Text style={styles.row3Text}>{item.email}</Text>
+      </View>
+      <View style={styles.row4}>
+        <FontAwesomeIcon icon={faRoad} style={styles.icons} />
+        <Text style={styles.row3Text}>{(item.traveled_distance / 1000).toFixed(2)}km</Text>
+        <FontAwesomeIcon icon={faBoxOpen} style={styles.icons} />
+        <Text style={styles.row3Text}>{item.bin_counter}</Text>
+
+        <FontAwesomeIcon icon={faStar} style={styles.icons} />
+        <Text style={styles.row3Text}>{((item.bin_counter * 3) / (item.traveled_distance / 1000)).toFixed(2) > 10 ? 10 : ((item.bin_counter * 3) / (item.traveled_distance / 1000)).toFixed(2)}</Text>
+
       </View>
     </TouchableOpacity>
 
@@ -154,12 +164,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 6
   },
+
   row3: {
     flexDirection: 'row',
+    marginBottom: 6
+  },
+  row4: {
+    flexDirection: 'row',
+    marginBottom: 6,
     borderBottomColor: 'gray',
     borderBottomWidth: 1,
     paddingBottom: 10,
-    marginBottom: 6
   },
   row1Text: {
     fontSize: 26,

@@ -76,7 +76,8 @@ export default class LoginScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.logo}>Garbage Management</Text>
+        <Text style={styles.logo}>Daha İyi Bir Çevre İçin</Text>
+        <Text style={styles.logo2}>Çöp Yönetimi</Text>
         <View style={styles.inputView} >
           <TextInput
             style={styles.inputText}
@@ -95,7 +96,7 @@ export default class LoginScreen extends Component {
           />
         </View>
         <TouchableOpacity>
-          <Text style={styles.forgot}>Şifreni mi Unuttun?</Text>
+          {/* <Text style={styles.forgot}>Şifreni mi Unuttun?</Text> */}
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -123,6 +124,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logo: {
+    fontWeight: "bold",
+    fontSize: 21,
+    color: "#03045e",
+    marginBottom: 0
+  },
+  logo2: {
     fontWeight: "bold",
     fontSize: 35,
     color: "#03045e",

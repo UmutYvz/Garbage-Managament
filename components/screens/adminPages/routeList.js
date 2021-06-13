@@ -35,7 +35,7 @@ export default class routeList extends React.Component {
 
 
   goToDriverDetail(item) {
-    this.props.navigation.navigate('MapScreen', { item })
+    this.props.navigation.navigate('MapScreen', { item, isAdmin: 1 })
   }
 
 
@@ -99,9 +99,9 @@ export default class routeList extends React.Component {
           </View>
 
 
-          <TouchableHighlight style={styles.rightB} onPress={() => { this.props.navigation.navigate('AAddDriverScreen') }}>
+          {/* <TouchableHighlight style={styles.rightB} onPress={() => { this.props.navigation.navigate('AAddDriverScreen') }}>
             <FontAwesomeIcon icon={faPlus} color='white' size={40} />
-          </TouchableHighlight>
+          </TouchableHighlight> */}
 
 
           <FlatList

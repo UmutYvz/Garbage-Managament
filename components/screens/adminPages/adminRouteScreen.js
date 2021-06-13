@@ -9,8 +9,6 @@ import * as Permissions from 'expo-permissions'
 import * as Location from 'expo-location'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faMapMarker } from '@fortawesome/free-solid-svg-icons';
-import { text } from '@fortawesome/fontawesome-svg-core';
-
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -52,15 +50,9 @@ export default class routeScreen extends React.Component {
             this.backAction
         );
 
-        try {
-            this._getLocationAsync();
-        } catch (error) {
-            console.log(error)
-        }
 
         this.state.timeout = setInterval(() => {
             this.currentMarker();
-            this._getLocationAsync();
         }, 3000)
 
 
@@ -74,27 +66,7 @@ export default class routeScreen extends React.Component {
         clearInterval(this.interval);
     }
 
-    _getLocationAsync = async () => {
-        try {
-            let { status } = await Permissions.askAsync(Permissions.LOCATION);
-            if (status !== 'granted') {
-                this.state({
-                    errorMessage: 'İzin reddedildi'
-                });
-            }
-            let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
-            this.setState({ location });
-            const copyOrigin = { ...this.state.destination }
-            copyOrigin.latitude = location.coords.latitude
-            copyOrigin.longitude = location.coords.longitude
-            this.setState({ origin: copyOrigin })
-            this.setState({ isLoaded: true })
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-
+    
 
     getParams = () => {
         this.state.user_id = this.props.route.params.item.id;
@@ -115,6 +87,12 @@ export default class routeScreen extends React.Component {
             copyDestionation.latitude = reports[reports.length - 1].lat
             copyDestionation.longitude = reports[reports.length - 1].lon
             this.setState({ destination: copyDestionation })
+
+            const copyOrigin = { ...this.state.destination }
+            copyOrigin.latitude = reports[0].lat
+            copyOrigin.longitude = reports[0].lon
+            this.setState({ origin: copyOrigin })
+            this.setState({ isLoaded: true })
 
             let coords = []
             reports.map(report =>
@@ -226,7 +204,7 @@ export default class routeScreen extends React.Component {
         const testLoc = this.state.origin;
         bins.map(bin => {
             if (bin.lat < (testLoc.latitude + 0.00005) && bin.lat > (testLoc.latitude - 0.00005)) {
-                axios.post('http://192.168.42.93/backend/feedback.php', {
+                axios.post('http://192.168.1.2/backend/feedback.php', {
                     id: bin.id
                 }).then(
                     console.log("Başarıyla silindi")
@@ -267,7 +245,6 @@ export default class routeScreen extends React.Component {
                         ref={c => this.mapView = c}
                         onPress={this.onMapPress}
                     >
-                        {this.currentMarker()}
                         {this.renderMarkers()}
                         {this.renderDirection()}
 
@@ -279,7 +256,7 @@ export default class routeScreen extends React.Component {
                 (<View >
                     <View style={styles.loading}>
                         <Image
-                            source={require('./shared/loading.gif')}
+                            source={require('../../shared/loading.gif')}
                         />
                     </View>
                 </View>)

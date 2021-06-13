@@ -41,7 +41,7 @@ export function DrawerContent(props) {
                         </View>
                     </View>
 
-                    <Drawer.Section style={styles.bottomDrawerSection, { marginTop: 20 }}>
+                    {/* <Drawer.Section style={styles.bottomDrawerSection}>
                         <DrawerItem
                             icon={({ color, size }) => (
                                 <FontAwesomeIcon icon={faHome} color='#28587D' size={size} />
@@ -49,8 +49,8 @@ export function DrawerContent(props) {
                             label="Giriş"
                             onPress={() => { props.navigation.navigate('UHomeScreen') }}
                         />
-                    </Drawer.Section>
-                    <Drawer.Section style={styles.bottomDrawerSection}>
+                    </Drawer.Section> */}
+                    {/* <Drawer.Section style={styles.bottomDrawerSection}>
                         <DrawerItem
                             icon={({ color, size }) => (
                                 <FontAwesomeIcon icon={faComment} color='#28587D' size={size} />
@@ -67,8 +67,8 @@ export function DrawerContent(props) {
                             label="Yorumlarım"
                             onPress={() => { props.navigation.navigate('UMyComments') }}
                         />
-                    </Drawer.Section>
-                    <Drawer.Section style={styles.bottomDrawerSection}>
+                    </Drawer.Section> */}
+                    <Drawer.Section style={styles.bottomDrawerSection, { marginTop: 20 }}>
                         <DrawerItem
                             icon={({ color, size }) => (
                                 <FontAwesomeIcon icon={faExchangeAlt} color='#28587D' size={size} />
